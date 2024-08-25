@@ -18,42 +18,27 @@ model = genai.GenerativeModel('gemini-1.5-flash')
 
 
 def home(request):
-    # response = model.generate_content("")
-    # print(response.text)
-    # return HttpResponse(response.text)
-    # if request.method == "POST":
-    #     text = request.POST.get("text")
-    #     model = genai.GenerativeModel("gemini-pro")
-    #     chat = model.start_chat()
-    #     response = chat.send_message(text)
-    #     user = request.user
-    #     ChatBot.objects.create(text_input=text, gemini_output=response.text, user=user)
-    #     # Extract necessary data from response
-    #     response_data = {
-    #         "text": response.text,  # Assuming response.text contains the relevant response data
-    #         # Add other relevant data from response if needed
-    #     }
-    #     return JsonResponse({"data": response_data})
-    # else:
-    #     return HttpResponseRedirect(
-    #         reverse("chat")
-    #     )  # Redirect to chat page for GET requests
 
     if request.method == 'POST':
         
-        user_mood=request.POST.get('user_mood',  'neutral')
-        user_message = "I am feeling " + user_mood + " suggest me some coping mechanisms for this emotional state. Also suggest some songs to listen to with this mood."
-        bot_response = model.generate_content(user_message)
+        # user_mood=request.POST.get('user_mood',  'neutral')
+        # user_message = "I am feeling " + user_mood + " suggest me some coping mechanisms for this emotional state. Also suggest some songs to listen to with this mood."
 
-        ChatMessage.objects.create(user_mood=user_mood, bot_response=bot_response.text)
+        # ChatMessage.objects.create(user_mood=user_mood, bot_response=bot_response.text)
+        user_message = request.POST.get('user_message')
+        message_for_bot="I am feeling " + str(user_message) + " suggest me some coping mechanisms for this emotional state. Also suggest some songs to listen to with this mood."
+        print(message_for_bot)
+        bot_response = model.generate_content(message_for_bot).text
+        # joined_bot_response=f' '.join(bot_response)
+        
+
+        ChatMessage.objects.create(user_message=user_message, bot_response=bot_response)
 
     return redirect('botresponse')
 
+
 def botresponse(request):
     messages = ChatMessage.objects.all()
-    print(messages)
-    return render(request, 'chatbot/home.html', { 'messages': messages })
-# def chat(request):
-#     user = request.user
-#     chats = ChatBot.objects.filter(user=user)
-#     return render(request, "chat_bot.html", {"chats": chats})
+    # print(messages)
+    return render(request, 'moodHack/home.html', { 'messages': messages })
+

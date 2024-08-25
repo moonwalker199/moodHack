@@ -3,21 +3,103 @@
 <head>
     <meta charset="UTF-8">
     <title>moodHack</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 98vh;
+        }
+        h1 {
+            color: #333;
+        }
+        .chat-container {
+            width: 80%;
+            max-width: 600px;
+            background-color: #fff;
+            padding: 20px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+            overflow-y: auto;
+            max-height: 70vh;
+            margin-bottom: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .message {
+            padding: 10px;
+            border-radius: 10px;
+            max-width: 80%;
+            word-wrap: break-word; /* Allows long words to wrap */
+            overflow-wrap: break-word; /* Wraps text to the next line */
+            line-height: 1.6;
+        }
+        .user-message {
+            background-color: #d1f7d6;
+            align-self: flex-end;
+            text-align: right;
+        }
+        .bot-message {
+            background-color: #f0f0f0;
+            align-self: flex-start;
+        }
+        .message strong {
+            display: block;
+            font-weight: bold;
+        }
+        form {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        textarea {
+            width: 100%;
+            max-width: 600px;
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            font-size: 16px;
+            margin-bottom: 10px;
+            resize: vertical; /* Allows the user to resize vertically */
+        }
+        input[type="submit"] {
+            padding: 10px 20px;
+            border-radius: 5px;
+            border: none;
+            background-color: #5cb85c;
+            color: #fff;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        input[type="submit"]:hover {
+            background-color: #4cae4c;
+        }
+    </style>
 </head>
 <body>
     <h1>Mood bta</h1>
-    {% for message in messages %}
+    <div class="chat-container">
+        {% for message in messages %}
     <div>
-        <strong>User:</strong>  {{ message.user_mood }}
+        <strong>User:</strong> {{ message.user_message }}
     </div>
     <div>
-        <strong>Bot:</strong>  {{ message.bot_response }}
+        <strong>Bot:</strong> <pre>{{ message.bot_response|safe }}</pre>
+        {% comment %} <script>{{ message.bot_response }}</script> {% endcomment %}
     </div>
     {% endfor %}
 
-    <form action="{% url 'home' %} " method="post">
+    </div>
+
+    <form action="{% url 'home' %}" method="post">
         {% csrf_token %}
-        <textarea name="user_mood"></textarea>
+        <textarea name="user_message" rows="4" placeholder="Type your mood..."></textarea>
         <input type="submit" value="Send">
     </form>
 </body>
