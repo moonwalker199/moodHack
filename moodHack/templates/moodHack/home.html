@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>moodHack</title>
+</head>
+<body>
+    <h1>Mood bta</h1>
+    {% for message in messages %}
+    <div>
+        <strong>User:</strong>  {{ message.user_mood }}
+    </div>
+    <div>
+        <strong>Bot:</strong>  {{ message.bot_response }}
+    </div>
+    {% endfor %}
+
+    <form action="{% url 'home' %} " method="post">
+        {% csrf_token %}
+        <textarea name="user_mood"></textarea>
+        <input type="submit" value="Send">
+    </form>
+</body>
+</html>
