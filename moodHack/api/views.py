@@ -1,44 +1,38 @@
-from django.shortcuts import render, reverse, redirect
-from django.contrib.auth.decorators import login_required
+from django.shortcuts import render, redirect
+from django.views.decorators.csrf import csrf_exempt
 from .models import ChatMessage
-from django.http import HttpResponseRedirect, JsonResponse, HttpResponse
+from django.http import JsonResponse
+from django.http import  JsonResponse 
 import google.generativeai as genai
 import os
 from dotenv import load_dotenv
 
-# Load environment variables from .env file
 load_dotenv()
 
-# Now you can access the API_KEY
 genai.configure(api_key=os.getenv("API_KEY"))
-
-# genai.configure(api_key=os.environ["API_KEY"])
 
 model = genai.GenerativeModel('gemini-1.5-flash')
 
-
-def home(request):
-
-    if request.method == 'POST':
-        
-        # user_mood=request.POST.get('user_mood',  'neutral')
-        # user_message = "I am feeling " + user_mood + " suggest me some coping mechanisms for this emotional state. Also suggest some songs to listen to with this mood."
-
-        # ChatMessage.objects.create(user_mood=user_mood, bot_response=bot_response.text)
-        user_message = request.POST.get('user_message')
-        message_for_bot="I am feeling " + str(user_message) + " suggest me some coping mechanisms for this emotional state. Also suggest some songs to listen to with this mood."
-        print(message_for_bot)
-        bot_response = model.generate_content(message_for_bot).text
-        # joined_bot_response=f' '.join(bot_response)
-        
-
-        ChatMessage.objects.create(user_message=user_message, bot_response=bot_response)
-
-    return redirect('botresponse')
+   
+@csrf_exempt
+def home(request, mood: str):
+    message_for_bot = "I am feeling " + mood + " suggest me some coping mechanisms for this emotional state. Also suggest some songs to listen to with this mood."
+    bot_response = model.generate_content(message_for_bot).text
+    
+    ChatMessage.objects.create(user_message=mood, bot_response=bot_response)
+    return JsonResponse({'status': 'success'})
 
 
 def botresponse(request):
-    messages = ChatMessage.objects.all()
-    # print(messages)
-    return render(request, 'moodHack/home.html', { 'messages': messages })
-
+    if request.method == 'GET':
+        # Get the latest ChatMessage entry
+        latest_message = ChatMessage.objects.latest('created_at')
+        
+        # Prepare the data to return as JSON
+        data = {
+            'user_message': latest_message.user_message,
+            'bot_response': latest_message.bot_response,
+            'created_at': latest_message.created_at.strftime('%Y-%m-%d %H:%M:%S')
+        }
+        
+    return JsonResponse(data)
