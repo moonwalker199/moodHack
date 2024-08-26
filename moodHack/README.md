@@ -24,7 +24,7 @@ fdsfddsf put git comands  here
 
 Access the moodHack webpage at server link here
 
-install the following 
+install the following <br>
 pip install -r requirements.txt
-
+<br>
 npm also
