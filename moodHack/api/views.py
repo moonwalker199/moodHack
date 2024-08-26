@@ -17,7 +17,9 @@ model = genai.GenerativeModel('gemini-1.5-flash')
 @csrf_exempt
 def home(request, mood: str):
     message_for_bot = "I am feeling " + mood + " suggest me some coping mechanisms for this emotional state. Also suggest some songs to listen to with this mood."
-    bot_response = model.generate_content(message_for_bot).text
+    first_bot_response=model.generate_content(message_for_bot).text.split('**')
+    bot_response='\n'.join(first_bot_response)
+    #bot_response = model.generate_content(message_for_bot).text
     
     ChatMessage.objects.create(user_message=mood, bot_response=bot_response)
     return JsonResponse({'status': 'success'})
