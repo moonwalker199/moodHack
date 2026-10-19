@@ -3,7 +3,7 @@
        - Submission for Hack8all hackathon conducted by mdgspace, IIT-R 
 
 
-## Welcome to __moodHack__, the ultimate online platform for understanding, managing, and tracking one's mood. moodHack is a web application developed with HTML,CSS,JavaScript(for front end) & (for backend)  , comprising a host of features that help users explore over 50+ moods and deal with their current emotions. The platform includes a chatbot for sentiment analysis, where people can discuss their feelings in a totally safe environment; contact options with professional mental health support; and news articles on moods. Understand your feelings, explore them, and enjoy emotional wellness with moodHack by your side.
+Welcome to __moodHack__, the ultimate online platform for understanding, managing, and tracking one's mood. moodHack is a web application developed with HTML,CSS,JavaScript(for front end) & (for backend)  , comprising a host of features that help users explore over 50+ moods and deal with their current emotions. The platform includes a chatbot for sentiment analysis, where people can discuss their feelings in a totally safe environment; contact options with professional mental health support; and news articles on moods. Understand your feelings, explore them, and enjoy emotional wellness with moodHack by your side.
 
 ## Features
 ### Mood Exploration 
